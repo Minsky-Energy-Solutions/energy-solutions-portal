@@ -99,6 +99,25 @@ function* updateNotes(action) {
   }
 }
 
+// saga to update report recommendation
+function* updateRecommendation(action) {
+  try {
+    console.log('in updateRecommendations saga, check action.payload', action.payload);
+  } catch (error) {
+    console.log('error updating recommendation', error);
+  }
+}
+
+// saga to add new recommendation
+function* addRecommendation(action) {
+  try {
+    console.log('in addRecommendation, check action.payload', action.payload);
+    yield axios.post(`/api/report/recommendations`, action.payload);
+  } catch (error) {
+    console.log('error adding recommendation', error);
+  }
+}
+
 // export
 function* reportSaga() {
   yield takeLatest('FETCH_REPORTS', fetchReports);
@@ -110,6 +129,8 @@ function* reportSaga() {
   yield takeLatest('DELETE_REPORT', deleteReport);
   yield takeLatest('APPROVE_REPORT', approveReport);
   yield takeLatest('UPDATE_NOTES', updateNotes);
+  yield takeLatest('UPDATE_RECOMMENDATION', updateRecommendation);
+  yield takeLatest('ADD_RECOMMENDATION', addRecommendation);
 }
 
 export default reportSaga;

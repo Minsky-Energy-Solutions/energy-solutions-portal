@@ -37,12 +37,19 @@ export default function EnergyReport() {
       history.push('/user-reports');
     }
   };
-
-  const [editToggle, setEditToggle] = useState(false);
+  // edit notes
+  const [editNotesToggle, setEditNotesToggle] = useState(false);
 
   const submitNotes = () => {
     dispatch({ type: 'UPDATE_NOTES', payload: { reportId: reportDetails.id, notes: reportDetails.notes } });
-    setEditToggle(!editToggle);
+    setEditNotesToggle(!editNotesToggle);
+  };
+  // edit recommendations
+  const [editRecsToggle, setEditRecsToggle] = useState(false);
+
+  const submitRecommendationEdit = (recommendationId) => {
+    console.log('in submitRecommendations, check rec id', recommendationId);
+    // dispatch({type: 'UPDATE_RECOMMENDATION', payload: {}})
   };
 
   return (
@@ -185,7 +192,12 @@ export default function EnergyReport() {
               <div>
                 <Typography level='body-sm'>
                   {reportDetails?.recommendations?.map((recommendation, index) => (
-                    <li key={index}>{recommendation}</li>
+                    <li key={index}>
+                      {recommendation}
+                      <IconButton onClick={() => setEditRecsToggle(!editRecsToggle)}>
+                        <EditIcon />
+                      </IconButton>
+                    </li>
                   ))}
                 </Typography>
               </div>
@@ -226,7 +238,7 @@ export default function EnergyReport() {
             >
               <Typography level='title-lg'>Report Notes</Typography>
               {user.admin ? (
-                <IconButton onClick={() => setEditToggle(!editToggle)}>
+                <IconButton onClick={() => setEditNotesToggle(!editNotesToggle)}>
                   <EditIcon />
                 </IconButton>
               ) : (
@@ -234,7 +246,7 @@ export default function EnergyReport() {
               )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {editToggle ? (
+              {editNotesToggle ? (
                 <form onSubmit={submitNotes}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <textarea

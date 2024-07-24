@@ -357,4 +357,35 @@ router.put('/notes/:id', rejectUnauthenticated, (req, res) => {
   }
 });
 
+// put to update report recommendations
+router.put('/recommendations', rejectUnauthenticated, (req, res) => {
+  console.log('in recommendations put, check req.body', req.body);
+  try {
+    const queryText = `
+    UPDATE "recommendations"
+    SET "recommendations"=$1
+    WHERE "id"=$2;`;
+    pool.query(queryText, [req.body.recommendations, req.body.id]);
+    res.sendStatus(200);
+  } catch (error) {
+    console.log('error updating report recommendation', error);
+    res.sendStatus(500);
+  }
+});
+
+// post to add new recommendation
+router.post('/recommendations', rejectUnauthenticated, (req, res) => {
+  console.log('in recommendations post, check req.body', req.body);
+  try {
+    const queryText = `
+    INSERT INTO "recommendations" ("report_id", "recommendations")
+    VALUES ($1, $2);`;
+    pool.query(queryText, [req.params.id, req.body.recommendations]);
+    res.sendStatus(200);
+  } catch (error) {
+    console.log('error adding new recommendation', error);
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;
