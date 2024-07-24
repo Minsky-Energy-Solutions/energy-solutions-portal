@@ -38,7 +38,6 @@ function* fetchCarbonFootprint() {
   try {
     const carbonResponse = yield axios.get('/api/report/carbon-footprint');
     yield put({ type: 'SET_CARBON', payload: carbonResponse.data });
-    console.log('check fetchCarbonFootprint', carbonResponse.data);
   } catch (error) {
     console.log('error fetching carbon footprint', error);
   }
@@ -49,7 +48,6 @@ function* fetchEnergyCost() {
   try {
     const costResponse = yield axios.get('/api/report/energy-cost');
     yield put({ type: 'SET_COST', payload: costResponse.data });
-    console.log('check fetchEnergyCost', costResponse.data);
   } catch (error) {
     console.log('error fetching energy cost', error);
   }
@@ -59,7 +57,6 @@ function* fetchEnergyCost() {
 function* addReport(action) {
   try {
     yield axios.post('/api/report', action.payload);
-    console.log('check addReport action.payload', action.payload);
     yield put({ type: 'FETCH_REPORTS' });
   } catch (error) {
     console.log('error adding new report', error);
@@ -69,7 +66,6 @@ function* addReport(action) {
 // saga to delete a report
 function* deleteReport(action) {
   try {
-    console.log('in deleteReport, check action.payload', action.payload);
     yield axios.delete(`/api/report/${action.payload}`);
     yield put({ type: 'FETCH_REPORTS' });
   } catch (error) {
@@ -80,7 +76,6 @@ function* deleteReport(action) {
 // saga to mark report as approved
 function* approveReport(action) {
   try {
-    console.log('in approveReport, check action.payload', action.payload);
     yield axios.put(`/api/report/${action.payload.reportId}`, action.payload);
     yield put({ type: 'FETCH_REPORT_DETAILS', payload: action.payload.reportId });
   } catch (error) {
@@ -91,7 +86,6 @@ function* approveReport(action) {
 // saga to update report notes
 function* updateNotes(action) {
   try {
-    console.log('in update notes saga, check action.payload', action.payload);
     yield axios.put(`/api/report/notes/${action.payload.reportId}`, action.payload);
     yield put({ type: 'FETCH_REPORT_DETAILS', payload: action.payload.reportId });
   } catch (error) {
@@ -101,7 +95,6 @@ function* updateNotes(action) {
 
 // saga to delete report recommendation
 function* deleteRecommendation(action) {
-  console.log('in delete saga, check action.payload', action.payload);
   try {
     yield axios.delete(`/api/report/recommendation/${action.payload.recommendationId}`);
     yield put({ type: 'FETCH_REPORT_DETAILS', payload: action.payload.reportId });
@@ -113,7 +106,6 @@ function* deleteRecommendation(action) {
 // saga to add new recommendation
 function* addRecommendation(action) {
   try {
-    console.log('in addRecommendation, check action.payload', action.payload);
     yield axios.post(`/api/report/recommendations`, action.payload);
     yield put({ type: 'FETCH_REPORT_DETAILS', payload: action.payload.reportId });
   } catch (error) {
