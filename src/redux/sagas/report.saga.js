@@ -101,9 +101,10 @@ function* updateNotes(action) {
 
 // saga to delete report recommendation
 function* deleteRecommendation(action) {
+  console.log('in delete saga, check action.payload', action.payload);
   try {
-    yield axios.delete(`/api/report/recommendation/${action.payload}`);
-    // yield put({ type: 'FETCH_REPORT_DETAILS', payload: action.payload.reportId });
+    yield axios.delete(`/api/report/recommendation/${action.payload.recommendationId}`);
+    yield put({ type: 'FETCH_REPORT_DETAILS', payload: action.payload.reportId });
   } catch (error) {
     console.log('error deleting recommendation', error);
   }

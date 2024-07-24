@@ -53,7 +53,8 @@ export default function EnergyReport() {
 
   const deleteRecommendation = (recommendationId) => {
     console.log('in submitRecommendations, check rec id', recommendationId);
-    dispatch({ type: 'DELETE_RECOMMENDATION', payload: recommendationId });
+    console.log('in submitRecommendations, check params id', params.id);
+    dispatch({ type: 'DELETE_RECOMMENDATION', payload: {recommendationId, reportId: params.id} });
   };
 
   // add recommendation
