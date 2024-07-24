@@ -103,6 +103,7 @@ function* updateNotes(action) {
 function* deleteRecommendation(action) {
   try {
     yield axios.delete(`/api/report/recommendation/${action.payload}`);
+    // yield put({ type: 'FETCH_REPORT_DETAILS', payload: action.payload.reportId });
   } catch (error) {
     console.log('error deleting recommendation', error);
   }
@@ -113,6 +114,7 @@ function* addRecommendation(action) {
   try {
     console.log('in addRecommendation, check action.payload', action.payload);
     yield axios.post(`/api/report/recommendations`, action.payload);
+    yield put({ type: 'FETCH_REPORT_DETAILS', payload: action.payload.reportId });
   } catch (error) {
     console.log('error adding recommendation', error);
   }

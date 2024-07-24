@@ -382,7 +382,7 @@ router.post('/recommendations', rejectUnauthenticated, (req, res) => {
     const queryText = `
     INSERT INTO "recommendations" ("report_id", "recommendations")
     VALUES ($1, $2);`;
-    pool.query(queryText, [req.params.id, req.body.recommendations]);
+    pool.query(queryText, [req.body.reportId, req.body.recommendations]);
     res.sendStatus(200);
   } catch (error) {
     console.log('error adding new recommendation', error);

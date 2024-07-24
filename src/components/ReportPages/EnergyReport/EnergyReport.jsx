@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 export default function EnergyReport() {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ export default function EnergyReport() {
       history.push('/user-reports');
     }
   };
+
   // edit notes
   const [editNotesToggle, setEditNotesToggle] = useState(false);
 
@@ -45,12 +47,32 @@ export default function EnergyReport() {
     dispatch({ type: 'UPDATE_NOTES', payload: { reportId: reportDetails.id, notes: reportDetails.notes } });
     setEditNotesToggle(!editNotesToggle);
   };
+
   // delete recommendations
   const [deleteRecsToggle, setDeleteRecsToggle] = useState(false);
 
   const deleteRecommendation = (recommendationId) => {
     console.log('in submitRecommendations, check rec id', recommendationId);
     dispatch({ type: 'DELETE_RECOMMENDATION', payload: recommendationId });
+  };
+
+  // add recommendation
+  const [addRecToggle, setAddRecToggle] = useState(false);
+
+  let [newRec, setNewRec] = useState({
+    recommendations: '',
+  });
+
+  const handleNewRec = (event) => {
+    event.preventDefault();
+    setNewRec(event.target.value);
+    console.log('check new rec', newRec);
+  };
+
+  const submitRec = (event) => {
+    console.log('in submitRec, check params.id', params.id);
+    event.preventDefault();
+    dispatch({ type: 'ADD_RECOMMENDATION', payload: { recommendations: newRec, reportId: params.id } });
   };
 
   return (
@@ -191,6 +213,9 @@ export default function EnergyReport() {
               <IconButton onClick={() => setDeleteRecsToggle(!deleteRecsToggle)}>
                 <EditIcon />
               </IconButton>
+              <IconButton onClick={() => setAddRecToggle(!addRecToggle)}>
+                <AddCircleOutlineIcon />
+              </IconButton>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <div>
@@ -206,6 +231,21 @@ export default function EnergyReport() {
                     ) : (
                       <li key={recommendation.id}>{recommendation.recommendation}</li>
                     )
+                  )}
+                  {addRecToggle ? (
+                    <form onSubmit={submitRec}>
+                      <input
+                        className='form-control'
+                        id='recommendations'
+                        type='text'
+                        placeholder='New Recommendation'
+                        value={newRec.recommendations}
+                        onChange={handleNewRec}
+                      />
+                      <button>Submit</button>
+                    </form>
+                  ) : (
+                    ''
                   )}
                 </Typography>
               </div>
