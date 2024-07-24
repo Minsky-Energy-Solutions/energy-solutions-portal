@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Container, Box, Button, Grid } from '@mui/joy';
+import { Container, Box, Button, Grid, ListItemDecorator } from '@mui/joy';
 import Card from '@mui/joy/Card';
 import Typography from '@mui/joy/Typography';
 import { DateTime } from 'luxon';
@@ -9,6 +9,7 @@ import './EnergyReport.css';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function EnergyReport() {
   const dispatch = useDispatch();
@@ -44,12 +45,12 @@ export default function EnergyReport() {
     dispatch({ type: 'UPDATE_NOTES', payload: { reportId: reportDetails.id, notes: reportDetails.notes } });
     setEditNotesToggle(!editNotesToggle);
   };
-  // edit recommendations
-  const [editRecsToggle, setEditRecsToggle] = useState(false);
+  // delete recommendations
+  const [deleteRecsToggle, setDeleteRecsToggle] = useState(false);
 
-  const submitRecommendationEdit = (recommendationId) => {
+  const deleteRecommendation = (recommendationId) => {
     console.log('in submitRecommendations, check rec id', recommendationId);
-    // dispatch({type: 'UPDATE_RECOMMENDATION', payload: {}})
+    dispatch({ type: 'DELETE_RECOMMENDATION', payload: recommendationId });
   };
 
   return (
@@ -167,7 +168,7 @@ export default function EnergyReport() {
             variant='outlined'
             sx={(theme) => ({
               maxWidth: 800,
-              maxHeight: 200,
+              maxHeight: 400,
               flexDirection: 'column',
               overflow: 'auto',
               transition: 'transform 0.3s, border 0.3s',
@@ -187,18 +188,25 @@ export default function EnergyReport() {
               <div>
                 <Typography level='title-lg'>Recommendations</Typography>
               </div>
+              <IconButton onClick={() => setDeleteRecsToggle(!deleteRecsToggle)}>
+                <EditIcon />
+              </IconButton>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <div>
                 <Typography level='body-sm'>
-                  {reportDetails?.recommendations?.map((recommendation, index) => (
-                    <li key={index}>
-                      {recommendation}
-                      {/* <IconButton onClick={() => setEditRecsToggle(!editRecsToggle)}>
-                        <EditIcon />
-                      </IconButton> */}
-                    </li>
-                  ))}
+                  {reportDetails?.recommendations?.map((recommendation) =>
+                    deleteRecsToggle ? (
+                      <li className='recommendation-item' key={recommendation.id}>
+                        <IconButton onClick={() => deleteRecommendation(recommendation.id)}>
+                          <ClearIcon />
+                        </IconButton>
+                        {recommendation.recommendation}
+                      </li>
+                    ) : (
+                      <li key={recommendation.id}>{recommendation.recommendation}</li>
+                    )
+                  )}
                 </Typography>
               </div>
             </Box>

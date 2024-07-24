@@ -359,18 +359,18 @@ router.put('/notes/:id', rejectUnauthenticated, (req, res) => {
   }
 });
 
-// put to update report recommendations
-router.put('/recommendations', rejectUnauthenticated, (req, res) => {
-  console.log('in recommendations put, check req.body', req.body);
+// delete report recommendations
+router.delete('/recommendation/:recommendationId', rejectUnauthenticated, (req, res) => {
+  const recommendationId = req.params.recommendationId;
+  console.log('in recommendations delete, check recommendationId', recommendationId);
   try {
     const queryText = `
-    UPDATE "recommendations"
-    SET "recommendations"=$1
-    WHERE "id"=$2;`;
-    pool.query(queryText, [req.body.recommendations, req.body.id]);
+    DELETE FROM "recommendations"
+    WHERE "id"=$1;`;
+    pool.query(queryText, [recommendationId]);
     res.sendStatus(200);
   } catch (error) {
-    console.log('error updating report recommendation', error);
+    console.log('error deleting report recommendation', error);
     res.sendStatus(500);
   }
 });

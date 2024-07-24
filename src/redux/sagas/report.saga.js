@@ -99,12 +99,12 @@ function* updateNotes(action) {
   }
 }
 
-// saga to update report recommendation
-function* updateRecommendation(action) {
+// saga to delete report recommendation
+function* deleteRecommendation(action) {
   try {
-    console.log('in updateRecommendations saga, check action.payload', action.payload);
+    yield axios.delete(`/api/report/recommendation/${action.payload}`);
   } catch (error) {
-    console.log('error updating recommendation', error);
+    console.log('error deleting recommendation', error);
   }
 }
 
@@ -129,7 +129,7 @@ function* reportSaga() {
   yield takeLatest('DELETE_REPORT', deleteReport);
   yield takeLatest('APPROVE_REPORT', approveReport);
   yield takeLatest('UPDATE_NOTES', updateNotes);
-  yield takeLatest('UPDATE_RECOMMENDATION', updateRecommendation);
+  yield takeLatest('DELETE_RECOMMENDATION', deleteRecommendation);
   yield takeLatest('ADD_RECOMMENDATION', addRecommendation);
 }
 
