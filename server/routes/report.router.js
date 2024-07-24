@@ -102,10 +102,12 @@ recommendations_agg AS (
   SELECT
     r."report_id",
     array_agg(
+    json_build_object(
       
-        r.recommendations
+        'id', r.id,
+        'recommendation', r.recommendations
       
-    ) AS recommendations
+    ) )AS recommendations
   FROM
     "recommendations" r
   GROUP BY r."report_id"

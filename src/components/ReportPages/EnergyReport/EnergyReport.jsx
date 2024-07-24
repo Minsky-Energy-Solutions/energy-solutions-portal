@@ -194,9 +194,9 @@ export default function EnergyReport() {
                   {reportDetails?.recommendations?.map((recommendation, index) => (
                     <li key={index}>
                       {recommendation}
-                      <IconButton onClick={() => setEditRecsToggle(!editRecsToggle)}>
+                      {/* <IconButton onClick={() => setEditRecsToggle(!editRecsToggle)}>
                         <EditIcon />
-                      </IconButton>
+                      </IconButton> */}
                     </li>
                   ))}
                 </Typography>
