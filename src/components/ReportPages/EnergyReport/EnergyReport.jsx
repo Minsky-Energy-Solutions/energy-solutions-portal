@@ -18,7 +18,6 @@ export default function EnergyReport() {
   const params = useParams();
   const user = useSelector((store) => store.user);
   const reportDetails = useSelector((store) => store.reports.reportDetails);
-  console.log('check reportDetails', reportDetails);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_REPORT_DETAILS', payload: params.id });
@@ -52,9 +51,7 @@ export default function EnergyReport() {
   const [deleteRecsToggle, setDeleteRecsToggle] = useState(false);
 
   const deleteRecommendation = (recommendationId) => {
-    console.log('in submitRecommendations, check rec id', recommendationId);
-    console.log('in submitRecommendations, check params id', params.id);
-    dispatch({ type: 'DELETE_RECOMMENDATION', payload: {recommendationId, reportId: params.id} });
+    dispatch({ type: 'DELETE_RECOMMENDATION', payload: { recommendationId, reportId: params.id } });
   };
 
   // add recommendation
@@ -67,13 +64,16 @@ export default function EnergyReport() {
   const handleNewRec = (event) => {
     event.preventDefault();
     setNewRec(event.target.value);
-    console.log('check new rec', newRec);
   };
 
   const submitRec = (event) => {
-    console.log('in submitRec, check params.id', params.id);
     event.preventDefault();
-    dispatch({ type: 'ADD_RECOMMENDATION', payload: { recommendations: newRec, reportId: params.id } });
+    console.log('check newrec', newRec.recommendations);
+    if (newRec.recommendations === '') {
+      return;
+    } else {
+      dispatch({ type: 'ADD_RECOMMENDATION', payload: { recommendations: newRec, reportId: params.id } });
+    }
   };
 
   return (
@@ -235,15 +235,19 @@ export default function EnergyReport() {
                   )}
                   {addRecToggle ? (
                     <form onSubmit={submitRec}>
-                      <input
-                        className='form-control'
-                        id='recommendations'
-                        type='text'
-                        placeholder='New Recommendation'
-                        value={newRec.recommendations}
-                        onChange={handleNewRec}
-                      />
-                      <button>Submit</button>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <input
+                          className='form-control'
+                          id='recommendations'
+                          type='text'
+                          placeholder='New Recommendation'
+                          value={newRec.recommendations}
+                          onChange={handleNewRec}
+                        />
+                        <Button type='submit' color='success'>
+                          Submit
+                        </Button>
+                      </Box>
                     </form>
                   ) : (
                     ''
@@ -298,19 +302,20 @@ export default function EnergyReport() {
               {editNotesToggle ? (
                 <form onSubmit={submitNotes}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <textarea
-                      className='text-area'
-                      rows='3'
+                    <input
+                      className='form-control'
+                      id='recommendations'
+                      type='text'
                       placeholder='Edit Notes'
                       value={reportDetails?.notes}
                       onChange={(event) =>
                         dispatch({ type: 'EDIT_REPORT_DETAILS', payload: { notes: event.target.value } })
                       }
-                    ></textarea>
+                    />
+                    <Button color='success' type='submit'>
+                      Submit
+                    </Button>
                   </Box>
-                  <Button color='success' type='submit'>
-                    Submit
-                  </Button>
                 </form>
               ) : (
                 <Typography level='body-sm'>{reportDetails.notes}</Typography>
